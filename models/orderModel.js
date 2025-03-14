@@ -6,7 +6,11 @@ const orderSchema = new mongoose.Schema({
     products:[
         {
             product:{type:mongoose.Schema.Types.ObjectId,ref:"Product"},
-            quantity:{type:Number, default:1}
+            title: String,
+            price: Number,
+            discountPrice: Number,
+            quantity: Number,
+            itemTotal: Number
         }
     ],
     totalPrice:{type:Number,required:false},

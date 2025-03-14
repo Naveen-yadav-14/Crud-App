@@ -15,9 +15,10 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>User</th>
-                    <th>email</th>
-                    <th>Product</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Products</th>
+                    <th>Price</th>
                     <th>Quantity</th>
                     <th>Total Price</th>
                     <th>Status</th>
@@ -28,23 +29,36 @@
                 {{#each orders}}
                 <tr id="order-{{_id}}">
                     <td>{{user.name}}</td>
-                    <td>({{user.email}})</td>
+                    <td>{{user.email}}</td>
                     <td>
                         {{#each products}}
-                            {{product.title}} (₹{{product.price}}) × {{quantity}}<br>
+                            {{title}}<br>
                         {{/each}}
                     </td>
-                    <td>{{#each products}}{{quantity}} {{/each}}</td>
-                    <td>₹{{totalPrice}}</td>
                     <td>
-                        <select class="form-control order-status" data-id="{{_id}}">
-                            <option value="Pending" {{#if (eq status "Pending")}}selected{{/if}}>Pending</option>
-                            <option value="Shipped" {{#if (eq status "Shipped")}}selected{{/if}}>Shipped</option>
-                            <option value="Delivered" {{#if (eq status "Delivered")}}selected{{/if}}>Delivered</option>
-                        </select>
+                        {{#each products}}
+                            ₹{{discountPrice}}<br>
+                        {{/each}}
                     </td>
                     <td>
-                        <button class="btn btn-danger delete-order" data-id="{{_id}}">Delete</button>
+                        {{#each products}}
+                            {{quantity}}<br>
+                        {{/each}}
+                    </td>
+                    <td>₹{{totalPrice}}</td>
+                    <td>
+                        <form action="/admin/orders/update/{{_id}}" method="POST">
+                            <select name="status" class="form-control" onchange="this.form.submit()">
+                                <option value="Pending" {{#if (eq status "Pending")}}selected{{/if}}>Pending</option>
+                                <option value="Shipped" {{#if (eq status "Shipped")}}selected{{/if}}>Shipped</option>
+                                <option value="Delivered" {{#if (eq status "Delivered")}}selected{{/if}}>Delivered</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                            <form action="/admin/orders/delete/{{_id}}?_method=DELETE" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                     </td>
                 </tr>
                 {{/each}}
@@ -67,17 +81,28 @@
             });
 
             // Delete Order
-            $(".delete-order").click(function() {
-                var orderId = $(this).data("id");
-                if (confirm("Are you sure you want to delete this order?")) {
-                    $.post(`/admin/orders/delete/${orderId}`, function(response) {
+            $(".delete-order").click(function () {
+            var orderId = $(this).data("id");
+
+            if (confirm("Are you sure you want to delete this order?")) {
+                $.ajax({
+                    url: `/admin/orders/delete/${orderId}`,
+                    type: "DELETE",  // Use DELETE instead of POST
+                    success: function (response) {
                         if (response.success) {
                             $("#order-" + orderId).remove();
                             alert("Order deleted successfully!");
+                        } else {
+                            alert(response.message || "Failed to delete order.");
                         }
-                    });
-                }
-            });
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error deleting order: " + xhr.responseText);
+                    }
+                });
+            }
+});
+
         });
     </script>
 

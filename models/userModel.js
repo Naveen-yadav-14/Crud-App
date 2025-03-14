@@ -12,7 +12,12 @@ const UserSchema = new mongoose.Schema({
   dob:{type:String,required:false,default:"NA"},
   age:{type:Number,required:false,default:18},
   gender:{type:String,required:false,default:"NA"},
-  cart:[{type:mongoose.Schema.Types.ObjectId, ref:'Product'}],
+  cart:[
+    {
+    productId: {type:mongoose.Schema.Types.ObjectId, ref:'Product'},
+    quantity:{type:Number, default:1}
+    }
+  ],
   authToken:{type:String,required:false}
 });
 

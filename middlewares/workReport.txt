@@ -6,16 +6,16 @@ Please find below the detailed work report for the day:
 project: E-commerce
 
 9:30 - 12:00
-      *Working with populate method.
+      *Written Api for place order where order contains userId, all products in the cart.
 
 12:00 - 1:00
-     * Understanding the relations between collections.
+     * Written Api for the update status of an product.
 
-1:40 - 3:00
-      *Written Api's to create User, posts.
+1:40 - 4:00
+      *Written Api to delete an order through Admin panel.
 
-3:00 - 7:00
-       *Written Api to get all posts by userId.
+4:00 - 7:00
+       *Seen the Integration of Razorpay payment gateway.
 
 Please let me know if you need any further details.
 

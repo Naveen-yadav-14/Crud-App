@@ -15,5 +15,7 @@ adminRouter.get("/singleproduct/:id",adminController.singleProduct);
 adminRouter.post("/updateproduct/:id", adminController.updateProduct);
 adminRouter.delete("/deleteproduct/:id",adminController.deleteProduct);
 adminRouter.get("/getorders",orderController.getAllOrders);
+adminRouter.delete('/orders/delete/:id',orderController.deleteOrder);
+adminRouter.post('/orders/update/:id',orderController.updateOrderStatus);
 
 module.exports = adminRouter;
