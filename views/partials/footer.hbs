@@ -1,0 +1,219 @@
+</div>
+<!-- /.content-wrapper -->
+
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        {{!-- <b>Version</b> 1.0 --}}
+    </div>
+    <strong>Copyright &copy; 2014-2027 <a href="https://analogueitsolutions.com/" target="_blank">Analogue IT
+            Solutions</a>.</strong> All rights reserved.
+</footer>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+<!-- jQuery -->
+<script src="/admin/js/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/admin/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="/admin/js/jquery.dataTables.min.js"></script>
+<script src="/admin/js/dataTables.bootstrap4.min.js"></script>
+<script src="/admin/js/dataTables.responsive.min.js"></script>
+<script src="/admin/js/responsive.bootstrap4.min.js"></script>
+<script src="/admin/js/dataTables.buttons.min.js"></script>
+<script src="/admin/js/buttons.bootstrap4.min.js"></script>
+<script src="/admin/js/jszip.min.js"></script>
+<script src="/admin/js/pdfmake.min.js"></script>
+<script src="/admin/js/vfs_fonts.js"></script>
+<script src="/admin/js/buttons.html5.min.js"></script>
+<script src="/admin/js/buttons.print.min.js"></script>
+<script src="/admin/js/buttons.colVis.min.js"></script>
+<script src="/admin/js/inputmask.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/admin/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/admin/js/demo.js"></script>
+
+<!-- Select2 -->
+<!--<script src="/admin/plugins/select2/js/select2.full.min.js"></script>-->
+
+<!-- Bootstrap Switch -->
+<script src="/admin/js/bootstrap-switch.min.js"></script>
+<script src="/admin/js/style.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+<!-- Toastr.js -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+<script>
+    $("input[data-bootstrap-switch]").each(function () {
+        $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable('#example2122')) {
+            $('#example2122').addClass('table table-bordered table-striped').DataTable({
+                "paging": true,
+            });
+        }
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable('#example2')) {
+            $('#example2').addClass('table table-bordered table-striped').DataTable({
+                "paging": true,
+            });
+        }
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        var table = $("#example1").DataTable({
+            "responsive": true, "ordering": true, "lengthChange": false, "autoWidth": false, "bPaginate": true, "bInfo": false, "searching": true, "pageLength": 10,
+            order: [[0, 'asc']],
+            buttons: [
+                {
+                    extend: 'csvHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                'colvis'
+            ]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+    });
+</script>
+<script>
+    function validateInput(input) {
+        input.value = input.value.replace(/\D/g, '');
+    }
+</script>
+<script>
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            window.location.reload();
+        }
+    });
+</script>
+
+{{!-- <script>
+    // Function to show toast notifications
+    function showToast(type, message) {
+        Swal.fire({
+            toast: true,
+            icon: type,
+            title: message,
+            position: 'top-end',  // Similar to your screenshot
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'swal2-toast'
+            }
+        });
+    }
+    // Show success message if exists
+    {{#if success}}
+    showToast('success', "{{success}}");
+    {{/if}}
+    {{#if error}}
+    showToast('error', "{{error}}");
+    {{/if}}
+</script>
+
+<script>
+    // Check if success or error messages exist
+    document.addEventListener('DOMContentLoaded', function () {
+        const successMessage = document.querySelector('.alert-success').textContent.trim();
+        const errorMessage = document.querySelector('.alert-danger').textContent.trim();
+        // Trigger success toast if success message exists
+        if (successMessage) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: successMessage,
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true, // SweetAlert2 Toast notification style
+                background: '#28a745', // Green background for success
+                color: '#fff', // White text color
+                customClass: {
+                    popup: 'swal2-toast-popup' // Add custom class for CSS targeting
+                }
+            });
+        }
+
+        // Trigger error toast if error message exists
+        if (errorMessage) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: errorMessage,
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true, // SweetAlert2 Toast notification style
+                background: '#dc3545', // Red background for error
+                color: '#fff', // White text color
+                customClass: {
+                    popup: 'swal2-toast-popup' // Add custom class for CSS targeting
+                }
+            });
+        }
+    });
+</script> --}}
+
+<script>
+    // Function to show toast notifications
+    function showToast(type, message) {
+        Swal.fire({
+            toast: true,
+            icon: type,
+            title: message,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'swal2-toast'
+            }
+        });
+    }
+
+    // Show success or error message if it exists
+    document.addEventListener('DOMContentLoaded', function () {
+        const successMessage = "{{success}}".trim();
+        const errorMessage = "{{error}}".trim();
+
+        if (successMessage) {
+            showToast('success', successMessage);
+        }
+
+        if (errorMessage) {
+            showToast('error', errorMessage);
+        }
+    });
+</script>

@@ -1,0 +1,63 @@
+{{>header}}
+<title>Users</title>
+<div class="row p-2" style="margin: 0px !important;">
+    <div class="col-md-12">
+        <div class="card mt-2" style="border-left: 2px solid #03C4CB;">
+            <div class="alert-success">{{success}}</div>
+            <div class="alert-danger">{{error}}</div>
+            <div class="card-header" style="background-color:#03C4CB; color:white;">
+                <h4><b>Users</b></h4>
+            </div>
+            <div class="card-body p-2">
+                <div id="example1_wrapper">
+                    <div class="row">
+                        <div class="col-sm-12 table-responsive">
+                            <table id="example2" aria-describedby="example1_info">
+                                <thead>
+                                    <tr>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">S.No</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Name</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Email</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Mobile</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">DOB</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Age</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Gender</th>
+                                        {{!-- <th class="sorting" tabindex="0" aria-controls="example1">Occupation</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Wallet</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Action</th> --}}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each allUsers}}
+                                    <tr class="odd">
+                                        <td>{{inc @index}}</td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.email}}</td>
+                                        <td>{{this.phoneNumber}}</td>
+                                        <td>{{this.dob}}</td>
+                                        <td>{{this.age}}</td>
+                                        <td>{{this.gender}}</td>
+                                        {{!-- <td>{{this.occupation}}</td>
+                                        <td>{{this.wallet}}</td> --}}
+                                        {{!-- <td>
+                                            <div class="eye d-flex justify-content-center">
+                                                <a href="/admin/user/{{this._id}}" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td> --}}
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{>footer}}
+</body>
+
+</html>

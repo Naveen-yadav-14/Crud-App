@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/admin/images/favicon.ico" type="image/x-icon">
+
+    <title>Login Page</title>
+    <!-- FontAwesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/admin/images/bg.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0px 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 520px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-image {
+            max-width: 30%;
+            height: auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #555;
+        }
+
+        .login-button {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            background-color: #03C4CB;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .login-button:hover {
+            background-color: #03C4CB;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .forgot-password a {
+            color: #f06037;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
+
+        /* Toast Notification CSS */
+        .toast {
+            visibility: hidden;
+            max-width: 50%;
+            margin: 0 auto;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 26px;
+            position: fixed;
+            z-index: 1;
+            right: 10px;
+            top: 30px;
+            font-size: 17px;
+            transform: translateX(-50%);
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {
+                right: 0;
+                opacity: 0;
+            }
+
+            to {
+                right: 10px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                right: 10px;
+                opacity: 1;
+            }
+
+            to {
+                right: 0;
+                opacity: 0;
+            }
+        }
+
+        .toast-success {
+            background-color: rgb(13, 223, 13);
+        }
+
+        .toast-error {
+            background-color: red;
+        }
+
+        #remember {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="logo-container">
+            <img src="/admin/images/cart.png" alt="Logo" class="logo-image">
+        </div>
+        <h2>Admin Login</h2>
+        <form action="/auth/login" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" required>
+                <p class="error-message" id="email-error" style="display: none; color: red;"></p>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <i style="margin: 10px;" class="fa-solid fa-lock eye-icon" id="togglePassword" title="Show Password"
+                    onclick="togglePassword()"></i>
+            </div>
+            <div class="alert" style="color: red;">{{error}}</div>
+            <br /><button type="submit" class="login-button">Login</button>
+        </form>
+    </div>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePassword');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-lock');
+                toggleIcon.classList.add('fa-lock-open');
+                toggleIcon.title = 'Hide Password';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-lock-open');
+                toggleIcon.classList.add('fa-lock');
+                toggleIcon.title = 'Show Password';
+            }
+        }
+        const passwordInput = document.getElementById('password');
+        passwordInput.addEventListener('input', function () {
+            passwordInput.value = passwordInput.value.replace(/^\s+/, '');
+        });
+    </script>
+
+    <script>
+        const emailInput = document.getElementById("email");
+        const emailError = document.getElementById("email-error");
+        const loginButton = document.querySelector(".login-button");
+
+        function validateEmail(email) {
+            const trimmedEmail = email.trim();
+            if (trimmedEmail.length === 0) {
+                return "Email address is required and cannot be empty.";
+            }
+            if (/^[!#$%&'*+/=?^_`{|}~.]/.test(trimmedEmail)) {
+                return "Email addresses cannot start with a special character or period.";
+            }
+            if (email !== trimmedEmail) {
+                return "Email contains leading or trailing spaces.";
+            }
+            if (trimmedEmail !== trimmedEmail.toLowerCase()) {
+                return "Email addresses should be in lowercase.";
+            }
+            const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,6}$/;
+            if (!emailRegex.test(trimmedEmail)) {
+                return "Please provide a valid email address.";
+            }
+            return "";
+        }
+
+        emailInput.addEventListener("input", () => {
+            const emailValue = emailInput.value;
+            const errorMessage = validateEmail(emailValue);
+
+            if (errorMessage) {
+                emailError.textContent = errorMessage;
+                emailError.style.display = "block";
+                emailInput.style.borderColor = "red";
+                loginButton.disabled = true; // Disable login button
+                loginButton.style.opacity = "0.6"; // Optional: Add visual feedback
+                loginButton.style.cursor = "not-allowed";
+            } else {
+                emailError.textContent = "";
+                emailError.style.display = "none";
+                emailInput.style.borderColor = "";
+                loginButton.disabled = false; // Enable login button
+                loginButton.style.opacity = "1"; // Reset visual feedback
+                loginButton.style.cursor = "pointer";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
+{{!-- // Simulate backend messages (Replace these with actual backend data)
+const error = "{{error}}"; // Backend error
+const success = "{{success}}"; // Backend success
+document.addEventListener('DOMContentLoaded', function () {
+const error = "{{error}}"; // Backend error message
+const success = "{{success}}"; // Backend success message
+if (error) {
+showToast(error, 'error');
+}
+if (success) {
+showToast(success, 'success');
+}
+});
+
+function showToast(message, type) {
+const toast = document.getElementById('toast');
+toast.className = 'toast show ' + (type === 'success' ? 'toast-success' : 'toast-error');
+toast.textContent = message;
+
+setTimeout(function () {
+toast.className = toast.className.replace('show', '');
+}, 2000);
+} --}}

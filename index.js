@@ -1,13 +1,89 @@
+require("dotenv").config();
+
+// console.log("EMAIL_USER:", process.env.EMAIL_USER);
+// console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
+
+
 const express = require('express')
+const expressSession = require('express-session')
+const mongoDBSession = require('connect-mongodb-session')(expressSession)
+const hbs = require('hbs');
+const flash = require('connect-flash')
 const app = express()
 const mongoose = require('mongoose')
 const productRoute = require('./routes/productRoute.js');
+const cors = require('cors');
+const path = require('path');
+const fileUpload = require('express-fileupload')
+const fs = require('fs')
+const methodOverride = require('method-override');
 
-const Product = require('./models/product.model.js')
+// const mongoDBSession = require('connect-mongodb-session')
 
+const Product = require('./models/product.model.js');
+const userAuthRouter = require('./routes/userAuthRoute.js');
+const adminAuthRouter = require("./routes/adminRoutes/adminAuRouter.js");
+const connectDB = require("./config/dbConnect.js");
+const { isAdmin } = require("./middlewares/authMiddleware.js");
+const adminRouter = require("./routes/adminRoutes/adminRouter.js");
+const registerHelpers = require("./helpers/helpers.js");
+const userRouter = require("./routes/userRoutes.js");
+
+//connect db
+connectDB();
+registerHelpers();
+
+const store = new mongoDBSession({
+    uri:process.env.MONGO_URI,
+    collection:"userSessions",
+})
+//middlewares
 app.use(express.json())
+app.use(cors())
+app.use(express.urlencoded({extended:true}))
+app.use(flash());
+app.use(fileUpload());
+app.use(methodOverride('_method'));
+
+
+app.use(expressSession({
+    secret:"thisIsSecretKey!",
+    resave:false,
+    saveUninitialized:false,
+    store:store,
+}))
+
+//template engine
+app.set("views", path.join(__dirname,"views"));
+app.set("view engine", "hbs");
+app.engine("html",hbs.__express);
+app.use(express.static(path.join(__dirname, "public")));
+
+ hbs.registerPartials(path.join(__dirname, "views", "partials"))
+//server upload as static images
+app.use("/uploads", express.static(path.join(__dirname,'/public/uploads')))
+
+// Ensure uploads folder exists
+const uploadDir = path.join(__dirname, "public/uploads");
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 app.use('/api/products',productRoute);
+app.use('/api',userAuthRouter);
+
+//admin auth
+app.use('/auth',adminAuthRouter);
+//admin access
+app.use('/admin',isAdmin,adminRouter)
+//user router
+app.use('/user',userRouter)
+
+app.listen(process.env.PORT, async(req,res)=>{
+    console.log(`server listening to port...${process.env.PORT}`);
+})
+
+
 
 
 
@@ -80,13 +156,3 @@ app.use('/api/products',productRoute);
 // })
 
 
-mongoose.connect("mongodb+srv://naveendaraboina88:umXXCvNTdlrAEUEz@backenddb.7g5mq.mongodb.net/?retryWrites=true&w=majority&appName=BackendDB")
-.then(()=>{
-    console.log("Connected to database")
-    app.listen(3000,()=>{
-        console.log("App listining on port 3000")
-    })
-})
-.catch(()=>{
-    console.log("connection failed")
-})

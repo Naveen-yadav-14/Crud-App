@@ -1,0 +1,136 @@
+{{>header}}
+<title>All Products</title>
+<style>
+    .picture-column {
+        width: 120px;
+        /* Set the width of the picture column */
+    }
+
+    .table-image {
+        width: 100px;
+        /* Set a max width for the images */
+        height: auto;
+        /* Maintain aspect ratio */
+    }
+</style>    
+<div class="row p-2" style="margin: 0px !important;">
+    <div class="col-md-12">
+        <div class="card mt-2" style="border-left: 2px solid black;">
+            <div class="alert-success">{{success}}</div>
+            <div class="alert-danger">{{error}}</div>
+            <div class="card-header" style="background-color: #03C4CB; color:white;">
+                <h4><b>All PRODUCTS</b></h4>
+            </div>
+            <div class="card-body p-2">
+                <div id="example1_wrapper">
+                    <div class="row">
+                        <div class="col-sm-12 table-responsive">
+                            <table id="example2" aria-describedby="example1_info">
+                                <thead>
+                                    <tr>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">S.No</th>
+                                        {{!-- <th class="sorting picture-column" tabindex="0" aria-controls="example1">Picture
+                                        </th> --}}
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Title</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Description</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Category</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Price</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Discount</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Discounted Price</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Quantity</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Delete</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each productExists}}
+                                    <tr class="odd">
+                                        <td>{{inc @index}}</td>
+                                        {{!-- <td><img src="/{{this.productPicture}}" class="table-image" alt=""></td> --}}
+                                        <td>{{this.title}}</td>
+                                        <td>{{this.description}}</td>
+                                        <td>{{this.category}}</td>
+                                        <td>{{this.price}}</td>
+                                        <td>{{this.discount}}</td>
+                                        <td>{{this.discountPrice}}</td>
+                                        <td>{{this.quantity}}</td>
+                                        <td>
+                                        <div class="eye d-flex justify-content-center">
+                                          <form action="/admin/deleteproduct/{{this._id}}?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure?')">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                             <button type="submit" class="btn btn-md btn-danger m-1">
+                                         <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                         </form>
+                                         </div>
+                                        </td>
+                                        <td>
+                                            <div class="eye d-flex justify-content-center">
+                                                <a href="/admin/singleproduct/{{this._id}}"
+                                                    class="btn btn-md btn-info m-1">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{>footer}}
+</body>
+<script>
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable('#example2')) {
+            $('#example2').addClass('table table-bordered table-striped').DataTable({
+                "paging": true,
+            });
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#updateModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+            var planId = button.data('id');
+            var title = button.data('title');
+            var description = button.data('description');
+            var price = button.data('price');
+            var duration = button.data('duration');
+            var status = button.data('status');
+            console.log(status);
+            modal.find('form').attr('action', '/admin/updateplan/' + planId);
+            modal.find('input[name="title"]').val(title);
+            modal.find('textarea[name="description"]').val(description);
+            modal.find('input[name="price"]').val(price);
+            modal.find('input[name="duration"]').val(duration);
+            $('.status').val(status)
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var planId = button.data('id');
+            var modal = $(this);
+            modal.find('a.btn-danger').attr('href', '/admin/deleteplan/' + planId);
+        });
+        if (!$.fn.DataTable.isDataTable('#example2')) {
+            $('#example2').addClass('table table-bordered table-striped').DataTable({
+                "paging": true,
+            });
+        }
+    });
+</script>
+
+</html>

@@ -1,0 +1,86 @@
+{{>header}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Orders</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <div class="container mt-4">
+        <h2>Orders Management</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>email</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orders}}
+                <tr id="order-{{_id}}">
+                    <td>{{user.name}}</td>
+                    <td>({{user.email}})</td>
+                    <td>
+                        {{#each products}}
+                            {{product.title}} (₹{{product.price}}) × {{quantity}}<br>
+                        {{/each}}
+                    </td>
+                    <td>{{#each products}}{{quantity}} {{/each}}</td>
+                    <td>₹{{totalPrice}}</td>
+                    <td>
+                        <select class="form-control order-status" data-id="{{_id}}">
+                            <option value="Pending" {{#if (eq status "Pending")}}selected{{/if}}>Pending</option>
+                            <option value="Shipped" {{#if (eq status "Shipped")}}selected{{/if}}>Shipped</option>
+                            <option value="Delivered" {{#if (eq status "Delivered")}}selected{{/if}}>Delivered</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger delete-order" data-id="{{_id}}">Delete</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Update Order Status
+            $(".order-status").change(function() {
+                var orderId = $(this).data("id");
+                var newStatus = $(this).val();
+
+                $.post(`/admin/orders/update/${orderId}`, { status: newStatus }, function(response) {
+                    if (response.success) {
+                        alert("Order status updated!");
+                    }
+                });
+            });
+
+            // Delete Order
+            $(".delete-order").click(function() {
+                var orderId = $(this).data("id");
+                if (confirm("Are you sure you want to delete this order?")) {
+                    $.post(`/admin/orders/delete/${orderId}`, function(response) {
+                        if (response.success) {
+                            $("#order-" + orderId).remove();
+                            alert("Order deleted successfully!");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+{{>footer}}
+</html>

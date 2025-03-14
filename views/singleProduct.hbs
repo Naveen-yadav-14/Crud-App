@@ -1,0 +1,104 @@
+{{>header}}
+<title>Single Product</title>
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-primary card-outline mt-3" style="border-left: 2px solid black;">
+          <div class="card-header" style="background-color:  #03C4CB; color:white;">
+            <h4><b>EDIT PRODUCT</b></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header p-2">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab">Product</a></li>
+            </ul>
+          </div>
+          <div class="alert-success">{{success}}</div>
+          <div class="alert-danger">{{error}}</div>
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="tab-pane active" id="details">
+                <form action="/admin/updateproduct/{{productExists._id}}" method="post" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <label class="col-form-label">Title</label>
+                        <input type="text" class="form-control" name="title" value="{{productExists.title}}" required>
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <label class="col-form-label">Description</label>
+                        <textarea class="form-control" rows="1" name="description" required>{{productExists.description}}</textarea>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="col-form-label">Discount(%)</label>
+                        <input type="number" class="form-control" name="discount" value="{{productExists.discount}}" >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label class="col-form-label">Category</label>
+                        <input type="text" class="form-control" name="category" value="{{productExists.category}}" required>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="col-form-label">Price</label>
+                        <input type="number" class="form-control" name="price" value="{{productExists.price}}" required>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="col-form-label">Discounted Price</label>
+                        <input type="number" class="form-control" name="discountedPrice" value="{{productExists.discountPrice}}">
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="col-form-label">Quantity</label>
+                        <input type="number" class="form-control" name="discountedPrice" value="{{productExists.quantity}}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label class="col-form-label">Upload Images (Max 3)</label>
+                      <input type="file" class="form-control" name="productImages" multiple>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-md-12 text-center">
+                      <button type="submit" class="btn btn-success">Update Product</button>
+                    </div>
+                  </div>
+                </form>
+               <div class="row mt-4">
+    {{#each productExists.images}}
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="col-form-label">Image {{@index}}</label>
+            <img class="img-fluid" src="/{{{this}}}" alt="Product Image">
+        </div>
+    </div>
+    {{/each}}
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{{>footer}}
+</html>

@@ -1,0 +1,201 @@
+{{>header}}
+<title>Dashboard</title>
+
+<div class="row p-3" style="margin: 0px !important;">
+    {{#if success}}
+    <div class="alert alert-success">{{success}}</div>
+    {{/if}}
+    {{#if error}}
+    <div class="alert alert-danger">{{error}}</div>
+    {{/if}}
+    <div class="col-lg-3 col-6">
+        <div class="small-box" style="background-color: #03C4CB; color:white;">
+            <div class="inner">
+                <h3>{{allUsers}}</h3>
+                <h3><b style="color: white;">Users</b></h3>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="/admin/allusers" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box" style="background-color: #03C4CB; color:white;">
+            <div class="inner">
+                <h3>{{allProducts}}</h3>
+                <h3><b style="color: white;">All Products</b></h3>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="/admin/allproducts" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box" style="background-color: #03C4CB; color:white;">
+            <div class="inner">
+                <h3>{{addproduct}}</h3>
+                <h3><b style="color: white;">Add Product</b></h3>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="/admin/addproduct" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+     <div class="col-lg-3 col-6">
+        <div class="small-box" style="background-color: #03C4CB; color:white;">
+            <div class="inner">
+                <h3>{{Orders}}</h3>
+                <h3><b style="color: white;">Orders</b></h3>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="/admin/getorders" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    {{!-- <div class="col-lg-3 col-6">
+        <div class="small-box" style="background-color: #03C4CB; color:white;">
+            <div class="inner">
+                <h3>{{Settings}}</h3>
+                <h3><b style="color: white;">Settings</b></h3>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="/admin/settings" class="small-box-footer">More info <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div> --}}
+    <!-- Chart -->
+    {{!-- <div class="col-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <canvas id="usersChart" style="width: 100%; max-height: 400px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <canvas id="usersCharted" style="width: 100%; max-height: 400px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{>footer}}
+
+<script>
+    // Bar Chart Data
+    const data = {
+        labels: ['Users', 'Interests', 'Videos', "Withdraws", "Reports"],
+        datasets: [{
+            label: 'Counts',
+            data: [{{ allUsers }}, {{ allInterests }}, {{ allVideos }}, {{ allWithDraws }}, {{ allReports }}],
+    backgroundColor: [
+        'rgba(75, 192, 192, 0.7)',
+        'rgba(153, 102, 255, 0.7)',
+        'rgba(255, 206, 86, 0.7)',
+        'rgba(54, 162, 235, 0.7)',
+        'rgba(245, 67, 67, 0.85)'
+    ],
+        borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(245, 67, 67, 1)'
+        ],
+            borderWidth: 1,
+                maxBarThickness: 30 // Adjust bar thickness here
+        }]
+    };
+
+    // Bar Chart Configuration
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    // Render Bar Chart
+    new Chart(document.getElementById('usersChart'), config);
+
+    // Pie Chart Data
+    const data2 = {
+        labels: ['Users', 'Interests', 'Videos', "Withdraws", "Reports"],
+        datasets: [{
+            label: 'Counts',
+            data: [{{ allUsers }}, {{ allInterests }}, {{ allVideos }}, {{ allWithDraws }}, {{ allReports }}],
+    backgroundColor: [
+        'rgba(75, 192, 192, 0.7)',
+        'rgba(153, 102, 255, 0.7)',
+        'rgba(255, 206, 86, 0.7)',
+        'rgba(54, 162, 235, 0.7)',
+        'rgba(245, 67, 67, 0.85)'
+    ],
+        borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(245, 67, 67, 1)'
+        ],
+            borderWidth: 1
+        }]
+    };
+
+    // Pie Chart Configuration
+    const configs = {
+        type: 'pie',
+        data: data2,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    // Render Pie Chart
+    new Chart(document.getElementById('usersCharted'), configs);
+</script> --}}
+</body>
+
+</html>

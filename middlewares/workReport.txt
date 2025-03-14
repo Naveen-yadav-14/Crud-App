@@ -1,0 +1,26 @@
+Dear Team lead,
+
+I hope this email finds you well.
+Please find below the detailed work report for the day:
+
+project: E-commerce
+
+9:30 - 12:00
+      *Working with populate method.
+
+12:00 - 1:00
+     * Understanding the relations between collections.
+
+1:40 - 3:00
+      *Written Api's to create User, posts.
+
+3:00 - 7:00
+       *Written Api to get all posts by userId.
+
+Please let me know if you need any further details.
+
+Best regards,
+Naveen Daraboina
+*BackEnd Developer*
+naveen@analogueitsolutionz.com
+Analogue It Solutions.
