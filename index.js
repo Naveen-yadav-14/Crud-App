@@ -9,7 +9,6 @@ const expressSession = require('express-session')
 const mongoDBSession = require('connect-mongodb-session')(expressSession)
 const hbs = require('hbs');
 const flash = require('connect-flash')
-const app = express()
 const mongoose = require('mongoose')
 const productRoute = require('./routes/productRoute.js');
 const cors = require('cors');
@@ -24,13 +23,18 @@ const Product = require('./models/product.model.js');
 const userAuthRouter = require('./routes/userAuthRoute.js');
 const adminAuthRouter = require("./routes/adminRoutes/adminAuRouter.js");
 const connectDB = require("./config/dbConnect.js");
-const { isAdmin } = require("./middlewares/authMiddleware.js");
+const { isAdmin, isValidToken } = require("./middlewares/authMiddleware.js");
 const adminRouter = require("./routes/adminRoutes/adminRouter.js");
 const registerHelpers = require("./helpers/helpers.js");
 const userRouter = require("./routes/userRoutes.js");
+const { initScheduledJobs } = require("./tasks/scheduledTasks.js");
 
+const app = express()
 //connect db
 connectDB();
+
+initScheduledJobs();
+
 registerHelpers();
 
 const store = new mongoDBSession({
@@ -77,7 +81,7 @@ app.use('/auth',adminAuthRouter);
 //admin access
 app.use('/admin',isAdmin,adminRouter)
 //user router
-app.use('/user',userRouter)
+app.use('/user',isValidToken, userRouter)
 
 app.listen(process.env.PORT, async(req,res)=>{
     console.log(`server listening to port...${process.env.PORT}`);

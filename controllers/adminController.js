@@ -50,6 +50,12 @@ module.exports={
             error:req.flash("error"),
         })
     },
+    renderPlanPage:async(req,res)=>{
+        return res.render('addPlan',{
+           success:req.flash('success'),
+           error:req.flash('error')
+        })
+    },
    addProduct:async(req,res)=>{
     try {
         if(!req.files||!req.files.productImages){
@@ -226,6 +232,34 @@ module.exports={
         } catch (error) {
             req.flash("error","Internal server error")
             return res.redirect("/admin/allproducts")
+        }
+    },
+    renderCheckoutPage:async(req,res)=>{
+        return res.render('checkOut',{
+           success:req.flash('success'),
+           error:req.flash('error')
+        })
+    },
+    renderSubscribedUser:async(req,res)=>{
+        try {
+           const users =  await user.find().populate('subscription.plan');
+           //console.log(users);
+           if(!users){
+            req.flash('error','No users found');
+            return res.redirect('/admin/dashboard');
+           }
+
+           const subscribedUsers = users.filter(user=>user.subscription.plan);
+          
+            return res.render('subscribedUsers',{subscribedUsers,
+                success:req.flash('success'),
+                error:req.flash('error')
+               })
+
+        } catch (error) {
+            console.log(error.message);
+            req.flash('error','Internal server error');
+            return res.redirect('/admin/dashboard');
         }
     }
 

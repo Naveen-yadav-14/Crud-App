@@ -3,6 +3,38 @@ const fs = require('fs').promises;
 const path = require("path");
 const jwt = require('jsonwebtoken');
 
+exports.isValidToken = async(req,res,next)=>{
+    try {
+        const authHeader = req.headers.authorization;
+        if(!authHeader||!authHeader.startsWith("Bearer ")){
+            return res.status(401).json({message:"Bearer token required"});
+        }
+        const token = authHeader.split(' ')[1];
+        if(!token){
+            return res.status(401).json({message:'token not found'});
+        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        if(!decoded){
+            return res.status(401).json({message:"Invalid Token"});
+        }
+        const decodedId = decoded.id;
+        const userExists = await user.findById(decodedId);
+        if(!userExists){
+            return res.status(400).json({message:'User not found'})
+        }
+        req.session.user = userExists;
+        next();
+    } catch (error) {
+        if(error instanceof jwt.TokenExpiredError){
+            return res.status(401).json({message:'Token Expired'});
+        } else if(error instanceof jwt.JsonWebTokenError){
+            return res.status(401).json({message:'Invalid Token'})
+        }
+        console.log(error);
+        return res.status(500).json({message:"Internal server error"});
+    }
+}
+
 exports.generateToken = (id)=>{
     return jwt.sign({id}, process.env.JWT_SECRET_KEY,{
         expiresIn:'346d'

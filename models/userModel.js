@@ -18,7 +18,12 @@ const UserSchema = new mongoose.Schema({
     quantity:{type:Number, default:1}
     }
   ],
-  authToken:{type:String,required:false}
+  authToken:{type:String,required:false},
+  subscription:{plan:{type:mongoose.Schema.Types.ObjectId, ref:'plans'},
+      //user:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
+      startDate:{type:Date},
+      endDate:{type:Date},
+      status:{type:String, enum:['active','expired'], default:'expired' }}
 });
 
 module.exports = mongoose.model("User", UserSchema);

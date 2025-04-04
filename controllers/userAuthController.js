@@ -121,7 +121,7 @@ module.exports = {
         userExists.authToken = token;
         await userExists.save();
         req.session.user = userExists;
-        res.status(200).json({msg:"login successfull"});
+        res.status(200).json({msg:"login successfull",userExists});
 
 
         } catch (error) {

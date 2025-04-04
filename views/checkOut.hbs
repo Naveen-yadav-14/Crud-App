@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Subscription Plans</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <h2>Choose a Subscription Plan</h2>
+    <div>
+        <p>Plan: <strong>Premium</strong></p>
+        <p>Price: <strong>₹5</strong></p>
+        <button onclick="makePayment('67d812b5acb2d7011891be64', '67c1a1df9c434871a443d90b')">Subscribe</button>
+    </div>
+
+    <script>
+        async function makePayment(planId, userId) {
+            try {
+                // Step 1: Create Order via Backend
+                const response = await fetch("/create-order", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ planId, userId })
+                });
+
+                const data = await response.json();
+                if (!data.orderId) throw new Error("Order creation failed");
+
+                // Step 2: Open Razorpay Checkout
+                const options = {
+                    key: data.key,
+                    amount: data.amount,
+                    currency: "INR",
+                    name: "MyApp",
+                    description: "Subscription Plan",
+                    order_id: data.orderId,
+                    handler: async function (response) {
+                        // Step 3: Verify Payment
+                        const verifyResponse = await fetch("/verify-payment", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                userId,
+                                planId
+                            })
+                        });
+
+                        const verifyData = await verifyResponse.json();
+                        if (verifyData.success) {
+                            alert("Payment successful! Subscription activated.");
+                        } else {
+                            alert("Payment verification failed.");
+                        }
+                    },
+                    prefill: {
+                        name: "John Doe",
+                        email: "johndoe@example.com",
+                        contact: "9876543210"
+                    }
+                };
+
+                const razorpay = new Razorpay(options);
+                razorpay.open();
+            } catch (error) {
+                console.error(error);
+                alert("Payment failed");
+            }
+        }
+    </script>
+</body>
+</html>
