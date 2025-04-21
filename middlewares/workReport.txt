@@ -1,14 +1,10 @@
 
 
-Project: Yaarish
+Project: Buykeyz
 
-9:30 - 1:00
-      *Verified the Admins and Executives page update functionality.
-      *Cleared bug related to update.
+1:40 - 5:00
+      *Added Quantity feild in the order details page for admin and super admin.
+      *Changed the view user and view product button in the admin and super admin panel
 
-1:40 - 4:00
-      *Guided to jagadeesh regarding validations.
-      *Removed Movies module from the admin panel.
-
-4:00 - 7:00
-      *Reviewed and understood how mongoose validation is working.
+5:00 - 7:00
+      *Verified all feilds in the order and order details page.

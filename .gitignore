@@ -1,3 +1,4 @@
 node_modules
 .env
-workReport
+middlewares/*.txt
+workReport.txt
