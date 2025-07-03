@@ -2,3 +2,5 @@
 .env
 workReport.txt
 copyCollection.js
+paymentControllerV1.js
+payment.hbs
