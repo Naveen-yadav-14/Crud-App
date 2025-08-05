@@ -28,27 +28,15 @@ module.exports = {
                 }
 
                 let user = await User.findOne({email});
-                // if(user)
-                // {
-                //     return res.status(400).json({msg:"user already exist"})
-                // }
-
-               // console.log(email,password);
-        
-                //hashing password
+                if(user)
+                {
+                    return res.status(400).json({msg:"user already exist"})
+                }
                 const salt = await bcrypt.genSalt(10);
-
-                //console.log("Password before hashing:", password); // Debugging log
-
                 const hashedPassword = await bcrypt.hash(password, salt);
-              //  console.log("Hashed Password:", hashedPassword); // Debugging log
-        
-                //generating otp
                 const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
-        
                 const otpExpires = new Date();
-            otpExpires.setMinutes(otpExpires.getMinutes() + 10); // OTP valid for 5 mins
-        
+                 otpExpires.setMinutes(otpExpires.getMinutes() + 10); // OTP valid for 5 mins
             // Create User
             user = new User({ email, password: hashedPassword, otp, otpExpires,age,dob,phoneNumber,gender,name });
             const token = generateToken(user._id);
@@ -72,48 +60,33 @@ module.exports = {
         try {
             const {email,otp} = req.body;
             const user = await User.findOne({email});
-
-           // console.log(user);
             if(!user){
                 return res.status(400).json({msg:"user not found"})
             }
-
-           // console.log(otp,user.otp,new Date(),user.otpExpires);
-
             if(otp!==user.otp||new Date()>user.otpExpires){
                 return res.status(400).json({msg:"Invalid otp or otp expried"});
             }
-
-           
-
             user.otp = null;
             user.otpExpires = null;
             user.isVerified = true;
-
             await user.save();
-
             res.status(200).json({msg:"Otp verified"})
-
         } catch (error) {
             res.status(500).json({error:error.message})
         }
     },
-
     login:async(req,res)=>{
         try {
             const {email,password} = req.body;
         if(!email||!password){
             return res.status(400).json({msg:"Please enter correct details"})
         }
-
         const userExists = await User.findOne({email});
         if(!userExists){
             return res.status(400).json({msg:"user not found"})
         }
-
         const existingPassword = userExists.password;
         const isMatch = bcrypt.compare(password,existingPassword);
-
         if(!isMatch){
             return res.status(400).json({msg:"Invalid credintials"})
         }
@@ -122,13 +95,8 @@ module.exports = {
         await userExists.save();
         req.session.user = userExists;
         res.status(200).json({msg:"login successfull",userExists});
-
-
         } catch (error) {
             res.status(500).json({error:error.message});
         }
-
     }
-
-
     }
